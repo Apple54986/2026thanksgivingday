@@ -209,4 +209,252 @@
 
       <!-- 關閉按鈕（修復：補回被遺漏的按鈕與閉合標籤） -->
       <div class="mt-6 text-center">
-        <button id="closeModalBtn" class="px-6 py-2 rounded-full
+        <button id="closeModalBtn" class="px-6 py-2 rounded-full bg-amber-200 hover:bg-amber-300 text-amber-900 font-black text-sm tracking-wide transition shadow-sm">
+          收下這份溫暖 ♡
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 腳本區 ================= -->
+  <script>
+    const CONFIG = {
+      GAS_API_URL: "https://script.google.com/macros/s/AKfycbylWT-CO1tl-6-bRKjHQFyPlkK2UwOZtsCgv52DFUqqyQx6nxWN-fwNqZ1MfOH1hCsG5g/exec",
+      GOOGLE_FORM_URL: "https://forms.gle/k6VeMofADWkixGyb8"
+    };
+
+    // 8 種符合插畫的便利貼配色主題
+    const NOTE_THEMES = [
+      {
+        bg: 'bg-[#FFE8EC]',
+        border: 'border-[#FFCCD5]',
+        accent: 'text-[#E06D82]',
+        pin: '❤️',
+        pinClass: '-top-3 left-6',
+        sway: 'sway-1',
+        rotate: '-rotate-2'
+      },
+      {
+        bg: 'bg-[#FFF9DB]',
+        border: 'border-[#FEEAA1]',
+        accent: 'text-[#DDA22A]',
+        pin: '🟡',
+        isTape: true,
+        tapeBg: 'bg-amber-300/80',
+        pinClass: '-top-2.5 left-1/2 -translate-x-1/2',
+        sway: 'sway-2',
+        rotate: 'rotate-1'
+      },
+      {
+        bg: 'bg-[#EBF4FF]',
+        border: 'border-[#C8E0FF]',
+        accent: 'text-[#5C94DB]',
+        pin: '📍',
+        pinClass: '-top-3.5 right-8',
+        sway: 'sway-3',
+        rotate: '-rotate-1'
+      },
+      {
+        bg: 'bg-[#FEF7D9]',
+        border: 'border-[#F8E9B6]',
+        accent: 'text-[#DA9D29]',
+        pin: '🟢',
+        isTape: true,
+        tapeBg: 'bg-emerald-300/80',
+        pinClass: '-top-2.5 right-6',
+        sway: 'sway-1',
+        rotate: 'rotate-2'
+      },
+      {
+        bg: 'bg-[#EDF9E7]',
+        border: 'border-[#CEEBC1]',
+        accent: 'text-[#6EA859]',
+        pin: '📎',
+        pinClass: '-top-3.5 left-8',
+        sway: 'sway-2',
+        rotate: '-rotate-2'
+      },
+      {
+        bg: 'bg-[#F4EBFF]',
+        border: 'border-[#E2CEFF]',
+        accent: 'text-[#9A6CD6]',
+        pin: '💖',
+        pinClass: '-top-3 left-1/2 -translate-x-1/2',
+        sway: 'sway-3',
+        rotate: 'rotate-1'
+      },
+      {
+        bg: 'bg-[#FFF8F0]',
+        border: 'border-[#FEE5CD]',
+        accent: 'text-[#D87D38]',
+        pin: '🎀',
+        isTape: true,
+        tapeBg: 'bg-rose-300/80',
+        pinClass: '-top-2.5 left-1/2 -translate-x-1/2',
+        sway: 'sway-1',
+        rotate: '-rotate-1'
+      },
+      {
+        bg: 'bg-[#FFF2E0]',
+        border: 'border-[#FDD8AE]',
+        accent: 'text-[#D47E24]',
+        pin: '📌',
+        pinClass: '-top-3.5 right-6',
+        sway: 'sway-2',
+        rotate: 'rotate-2'
+      }
+    ];
+
+    let storyList = [];
+
+    // DOM 元素快取
+    const storiesWall = document.getElementById('storiesWall');
+    const loadingBox = document.getElementById('loadingBox');
+    const emptyBox = document.getElementById('emptyBox');
+    const storyCount = document.getElementById('storyCount');
+    const drawBtn = document.getElementById('drawBtn');
+    const shareBtn = document.getElementById('shareBtn');
+    const storyModal = document.getElementById('storyModal');
+    const modalBox = document.getElementById('modalBox');
+    const modalContent = document.getElementById('modalContent');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    // 初始化載入
+    document.addEventListener("DOMContentLoaded", () => {
+      if (shareBtn) shareBtn.href = CONFIG.GOOGLE_FORM_URL;
+      bindEvents();
+      fetchStories();
+    });
+
+    function bindEvents() {
+      // 點擊關閉按鈕或彈窗背景
+      if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+      }
+      if (storyModal) {
+        storyModal.addEventListener('click', (e) => {
+          if (e.target === storyModal) closeModal();
+        });
+      }
+
+      // 抽一份幸福按鈕
+      if (drawBtn) {
+        drawBtn.addEventListener('click', () => {
+          if (!storyList || storyList.length === 0) {
+            alert("目前還沒有故事可以抽取喔，歡迎先分享！");
+            return;
+          }
+          const randomIndex = Math.floor(Math.random() * storyList.length);
+          openModal(storyList[randomIndex].content);
+        });
+      }
+    }
+
+    // 取得 Google Apps Script B 欄故事資料
+    async function fetchStories() {
+      if (loadingBox) loadingBox.classList.remove('hidden');
+      if (storiesWall) storiesWall.classList.add('hidden');
+      if (emptyBox) emptyBox.classList.add('hidden');
+
+      try {
+        const res = await fetch(CONFIG.GAS_API_URL);
+        const data = await res.json();
+
+        if (data.status === "success" && Array.isArray(data.stories)) {
+          storyList = data.stories;
+          if (storyCount) storyCount.textContent = storyList.length;
+          renderStories(storyList);
+        } else {
+          storyList = [];
+          renderStories([]);
+        }
+      } catch (err) {
+        console.error("載入失敗:", err);
+        storyList = [];
+        renderStories([]);
+      } finally {
+        if (loadingBox) loadingBox.classList.add('hidden');
+      }
+    }
+
+    // 渲染可愛便利貼
+    function renderStories(stories) {
+      if (!storiesWall) return;
+      storiesWall.innerHTML = '';
+
+      if (stories.length === 0) {
+        if (emptyBox) emptyBox.classList.remove('hidden');
+        if (storyCount) storyCount.textContent = '0';
+        return;
+      }
+
+      storiesWall.classList.remove('hidden');
+
+      stories.forEach((story, idx) => {
+        const theme = NOTE_THEMES[idx % NOTE_THEMES.length];
+        const cardWrapper = document.createElement('div');
+        cardWrapper.className = `cursor-pointer transition-transform duration-300 sticky-card ${theme.sway}`;
+
+        let pinElement = '';
+        if (theme.isTape) {
+          pinElement = `
+            <div class="absolute ${theme.pinClass} w-14 h-4 ${theme.tapeBg} rounded-sm shadow-xs border border-white/40 -rotate-1 z-10 opacity-90"></div>
+          `;
+        } else {
+          pinElement = `
+            <div class="absolute ${theme.pinClass} text-xl drop-shadow-sm z-10 select-none">${theme.pin}</div>
+          `;
+        }
+
+        cardWrapper.innerHTML = `
+          <div class="relative ${theme.bg} border-2 ${theme.border} rounded-[28px] p-5 shadow-[0_6px_16px_rgba(138,77,23,0.08)] h-56 flex flex-col justify-between group">
+            ${pinElement}
+            <div class="dashed-border rounded-[20px] p-4 h-full flex flex-col justify-between overflow-hidden">
+              <p class="text-amber-950 font-bold text-sm sm:text-base leading-relaxed line-clamp-4">
+                ${escapeHtml(story.content)}
+              </p>
+              <div class="flex items-center justify-between text-xs font-black ${theme.accent} pt-2 mt-auto">
+                <span class="tracking-widest">˗ˏˋ ☀︎ ˎˊ˗</span>
+                <span class="text-sm">♡ ♡</span>
+              </div>
+            </div>
+          </div>
+        `;
+
+        cardWrapper.addEventListener('click', () => {
+          openModal(story.content);
+        });
+
+        storiesWall.appendChild(cardWrapper);
+      });
+    }
+
+    // Modal 控制
+    function openModal(content) {
+      if (!storyModal || !modalContent || !modalBox) return;
+      modalContent.textContent = content;
+      storyModal.classList.remove('hidden');
+      setTimeout(() => {
+        storyModal.classList.remove('opacity-0');
+        modalBox.classList.remove('scale-90');
+      }, 10);
+    }
+
+    function closeModal() {
+      if (!storyModal || !modalBox) return;
+      storyModal.classList.add('opacity-0');
+      modalBox.classList.add('scale-90');
+      setTimeout(() => {
+        storyModal.classList.add('hidden');
+      }, 200);
+    }
+
+    // XSS 防護
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.innerText = str;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>
