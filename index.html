@@ -202,7 +202,7 @@
             const refreshIcon = document.getElementById('refreshIcon');
             
             if (refreshIcon) refreshIcon.classList.add('fa-spin');
-            statusMsg.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> 連線試算表「感恩分享」中...';
+            statusMsg.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> 連線更新中...';
 
             const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
 
