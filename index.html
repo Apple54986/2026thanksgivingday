@@ -148,7 +148,7 @@
     <!-- FOOTER -->
     <footer class="relative z-20 text-center py-6 px-4 border-t border-warmgold/10 text-warmcream/50 text-xs">
         <p>感謝每一位在生命中帶來溫暖的人 🍁 幸福+感謝故事館</p>
-        <p class="mt-1">資料來源</p>
+        <p class="mt-1">資料來源：Google 雲端試算表「感恩分享」工作表</p>
     </footer>
 
     <!-- MODAL: 故事詳細內容 -->
@@ -160,27 +160,20 @@
             </button>
 
             <div class="flex items-center gap-2 mb-4">
-                <span id="modalCategory" class="px-3 py-1 rounded-full text-xs font-bold bg-maplered/30 border border-maplered/50 text-warmgold">
-                    感恩分享 (B欄)
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-maplered/30 border border-maplered/50 text-warmgold flex items-center gap-1.5">
+                    <i class="fa-solid fa-leaf text-maplered"></i> 感恩故事分享
                 </span>
-                <span id="modalDate" class="text-xs text-warmcream/50"></span>
+                <span id="modalIndex" class="text-xs text-warmcream/60"></span>
             </div>
 
-            <h3 id="modalTitle" class="text-2xl md:text-3xl font-serif font-bold text-warmgold mb-2"></h3>
-            <div class="flex items-center gap-2 text-sm text-lightamber mb-6 italic">
-                <span>致：</span><span id="modalRecipient" class="font-bold"></span>
+            <h3 id="modalTitle" class="text-xl md:text-2xl font-serif font-bold text-warmgold mb-4 pb-2 border-b border-warmgold/20"></h3>
+
+            <!-- 故事主要內文 -->
+            <div class="bg-black/25 rounded-2xl p-5 md:p-6 border border-warmgold/10 mb-6 max-h-72 overflow-y-auto leading-relaxed text-warmcream/90 text-sm md:text-base font-serif space-y-3 whitespace-pre-wrap" id="modalStoryBody">
             </div>
 
-            <div class="bg-black/20 rounded-2xl p-5 border border-warmgold/10 mb-6 max-h-60 overflow-y-auto leading-relaxed text-warmcream/90 text-sm md:text-base font-serif space-y-3 whitespace-pre-wrap" id="modalStoryBody">
-            </div>
-
-            <div class="bg-gradient-to-r from-warmgold/10 to-maplered/10 border-l-4 border-warmgold p-4 rounded-r-2xl text-warmgold italic text-sm">
-                <i class="fa-solid fa-quote-left mr-2 opacity-50"></i>
-                <span id="modalQuote">「世上所有的偶然遇見，都是溫暖的重逢。」</span>
-            </div>
-
-            <div class="mt-6 flex justify-end items-center text-xs text-warmcream/60">
-                <button onclick="closeStoryModal()" class="px-6 py-2.5 rounded-xl bg-warmgold text-amberwood font-bold hover:bg-lightamber transition-all shadow-md">
+            <div class="flex justify-end items-center">
+                <button onclick="closeStoryModal()" class="px-6 py-2.5 rounded-xl bg-warmgold text-amberwood font-bold hover:bg-lightamber transition-all shadow-md text-xs md:text-sm">
                     關閉故事
                 </button>
             </div>
@@ -198,25 +191,24 @@
         // ==========================================
         // ⚙️ Google 雲端試算表設定區
         // ==========================================
-        // 請將此處字串替換為您 Google 試算表（幸福+感謝故事館）網址中的試算表 ID：
         const SPREADSHEET_ID = '1mle9Hf4ft7c5R73WZ5LDe5hHAY4lVOpRYDVFSsuSMLY'; 
         const SHEET_NAME = '感恩分享';
 
         let storyData = [];
 
-        // --- 1. 從 GOOGLE 試算表擷取資料 ---
+        // --- 1. 從 GOOGLE 試算表擷取資料（只讀取 B 欄） ---
         async function fetchGoogleSheetData(isManualRefresh = false) {
             const statusMsg = document.getElementById('statusMsg');
             const refreshIcon = document.getElementById('refreshIcon');
             
             if (refreshIcon) refreshIcon.classList.add('fa-spin');
-            statusMsg.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> 連線中...';
+            statusMsg.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> 連線試算表「感恩分享」中...';
 
             const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
 
             try {
                 const response = await fetch(url);
-                if (!response.ok) throw new Error('連線試算表失敗，請確認試算表 ID 是否正確且已開放共用。');
+                if (!response.ok) throw new Error('連線試算表失敗，請確認試算表共用權限是否已設定為公開檢視。');
                 
                 const text = await response.text();
                 const jsonStr = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
@@ -226,41 +218,28 @@
                 const parsedStories = [];
 
                 rows.forEach((row, index) => {
-                    if (!row.c) return;
+                    if (!row || !row.c) return;
 
-                    // 欄位對應（c[0]=A欄, c[1]=B欄, c[2]=C欄, c[3]=D欄...）
-                    const colA = row.c[0] ? (row.c[0].f || row.c[0].v || '') : '';
-                    const colB = row.c[1] ? (row.c[1].f || row.c[1].v || '') : ''; // 讀取 B 欄：感恩故事內容
-                    const colC = row.c[2] ? (row.c[2].f || row.c[2].v || '') : '';
-                    const colD = row.c[3] ? (row.c[3].f || row.c[3].v || '') : '';
-
+                    // 只抓取 B 欄位 (index 1)
+                    const colB = row.c[1] ? (row.c[1].f || row.c[1].v || '') : '';
                     const storyText = String(colB).trim();
 
-                    // 若 B 欄為空或是表頭標題列則跳過
-                    if (!storyText || storyText === '故事' || storyText === '感謝故事' || storyText === '故事內容') {
+                    // 跳過空列或常見表頭文字
+                    if (!storyText || storyText === '故事' || storyText === '感謝故事' || storyText === '故事內容' || storyText === '故事分享') {
                         return;
                     }
 
-                    // 標題預設抓 A 欄，若 A 欄為空則取 B 欄前 14 個字
-                    const titleText = colA ? String(colA).trim() : (storyText.slice(0, 14) + (storyText.length > 14 ? '...' : ''));
-                    const recipientText = colC ? String(colC).trim() : '身邊溫暖的人';
-                    const quoteText = colD ? String(colD).trim() : '感謝有你，溫暖常在。';
-
                     parsedStories.push({
-                        id: index + 1,
-                        title: titleText,
-                        recipient: recipientText,
-                        date: new Date().toISOString().split('T')[0],
-                        story: storyText, // B 欄位內容
-                        quote: quoteText
+                        id: parsedStories.length + 1,
+                        story: storyText
                     });
                 });
 
                 if (parsedStories.length === 0) {
-                    statusMsg.innerHTML = '⚠️ 試算表「感恩分享」工作表目前 B 欄尚無故事資料。';
+                    statusMsg.innerHTML = '⚠️ 試算表「感恩分享」工作表的 B 欄目前尚無故事。';
                 } else {
                     storyData = parsedStories;
-                    statusMsg.innerHTML = `🍁 已成功自 Google 試算表載入 <strong>${storyData.length}</strong> 則感謝故事`;
+                    statusMsg.innerHTML = `🍁 已成功載入 <strong>${storyData.length}</strong> 則感謝故事`;
                 }
 
                 renderLeaves();
@@ -268,31 +247,23 @@
 
             } catch (err) {
                 console.warn('載入 Google 試算表失敗，啟動備份演示資料：', err);
-                statusMsg.innerHTML = `<span class="text-maplered">⚠️ 雲端試算表未連線（請記得替換程式碼中的 SPREADSHEET_ID 並開啟共用檢視權限）</span>`;
+                statusMsg.innerHTML = `<span class="text-maplered">⚠️ 雲端試算表未連線，請確認權限已設為「知道連結的任何人均可檢視」</span>`;
                 loadFallbackStories();
             } finally {
                 if (refreshIcon) refreshIcon.classList.remove('fa-spin');
             }
         }
 
-        // 備用演示資料（避免剛開啟尚未設定 ID 時完全無內容）
+        // 備用演示資料（僅保留故事內容）
         function loadFallbackStories() {
             storyData = [
                 {
                     id: 1,
-                    title: '那碗暖心熱湯',
-                    recipient: '夜市老火車站麵攤老闆娘',
-                    date: '2026-11-15',
-                    story: '（範例資料）記得那是幾年前一個寒冷的冬夜，加完班錯過了末班車。走到巷口的麵攤，老闆娘端了一碗熱騰騰的湯給我：「孩子辛苦了，這碗阿姨請你。」那天的湯特別甜，溫暖了我整個低潮的季節。',
-                    quote: '有時候，一碗熱湯就能為孤單的夜點亮整座城市。'
+                    story: '（範例故事）記得那是幾年前一個寒冷的冬夜，加完班錯過了末班車。走到巷口的麵攤，老闆娘端了一碗熱騰騰的湯給我：「孩子辛苦了，這碗阿姨請你。」那天的湯特別甜，溫暖了我整個低潮的季節。'
                 },
                 {
                     id: 2,
-                    title: '雨天裡的雨傘',
-                    recipient: '捷運站陌生乘客',
-                    date: '2026-10-20',
-                    story: '（範例資料）下暴雨的午後，一位準備搭車的小姐把手上的折疊傘遞給了我：「這把傘送你吧！別淋濕感冒了。」那把紅傘，我至今依然珍藏著。',
-                    quote: '陌生人的善意，是漫長雨季裡最燦爛的陽光。'
+                    story: '（範例故事）下暴雨的午後，一位準備搭車的小姐把手上的折疊傘遞給了我：「這把傘送你吧！別淋濕感冒了。」那把紅傘，我至今依然珍藏著。'
                 }
             ];
             renderLeaves();
@@ -306,7 +277,7 @@
             storyData.forEach((item, index) => {
                 const leafElem = document.createElement('div');
                 leafElem.className = 'floating-leaf cursor-pointer bg-amberwood/60 border border-warmgold/20 rounded-2xl p-5 flex flex-col justify-between shadow-xl backdrop-blur-sm relative group hover:border-warmgold/60';
-                leafElem.style.animationDelay = `${(index % 5) * 0.5}s`;
+                leafElem.style.animationDelay = `${(index % 5) * 0.4}s`;
                 leafElem.onclick = () => openStoryModal(item.id);
 
                 const iconColor = index % 2 === 0 ? 'text-maplered' : 'text-warmgold';
@@ -314,19 +285,17 @@
                 leafElem.innerHTML = `
                     <div class="flex items-center justify-between mb-3">
                         <i class="fa-solid fa-leaf ${iconColor} text-2xl group-hover:rotate-45 transition-transform duration-300"></i>
-                        <span class="text-[10px] text-warmgold/60 bg-warmgold/10 px-2 py-0.5 rounded-full border border-warmgold/20">楓葉 #${index + 1}</span>
+                        <span class="text-[10px] text-warmgold/70 bg-warmgold/10 px-2.5 py-0.5 rounded-full border border-warmgold/20 font-bold">
+                            #${item.id}
+                        </span>
                     </div>
                     <div>
-                        <h4 class="font-serif font-bold text-base text-warmcream group-hover:text-warmgold transition-colors mb-1 truncate">
-                            ${item.title}
-                        </h4>
-                        <p class="text-xs text-warmcream/60 line-clamp-3 leading-relaxed">
+                        <p class="text-xs md:text-sm text-warmcream/80 line-clamp-4 leading-relaxed font-serif">
                             ${item.story}
                         </p>
                     </div>
-                    <div class="mt-4 pt-2 border-t border-warmgold/10 flex justify-between items-center text-[10px] text-warmcream/50">
-                        <span class="truncate max-w-[130px]">致: ${item.recipient}</span>
-                        <span class="text-warmgold">閱讀 ></span>
+                    <div class="mt-4 pt-3 border-t border-warmgold/10 flex justify-end items-center text-xs text-warmgold font-semibold group-hover:translate-x-1 transition-transform">
+                        <span>拾起閱讀 <i class="fa-solid fa-angle-right ml-1"></i></span>
                     </div>
                 `;
                 grid.appendChild(leafElem);
@@ -338,11 +307,9 @@
             const story = storyData.find(item => item.id === id);
             if (!story) return;
 
-            document.getElementById('modalTitle').innerText = story.title;
-            document.getElementById('modalRecipient').innerText = story.recipient;
-            document.getElementById('modalDate').innerText = story.date || '';
+            document.getElementById('modalIndex').innerText = `故事 #${story.id}`;
+            document.getElementById('modalTitle').innerText = `暖心感謝分享 #${story.id}`;
             document.getElementById('modalStoryBody').innerText = story.story;
-            document.getElementById('modalQuote').innerText = story.quote || '感謝有你，溫暖常在。';
 
             const modal = document.getElementById('storyModal');
             const content = document.getElementById('storyModalContent');
