@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>感恩故事館 | 拾起一片楓葉，閱讀一段感謝</title>
+    <title>幸福+感恩故事館 | 讓感謝被看見，讓幸福加滿分</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -107,13 +107,13 @@
     <header class="relative z-20 pt-8 pb-4 px-4 text-center">
         <div class="max-w-4xl mx-auto">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-warmgold/10 border border-warmgold/30 text-warmgold text-sm mb-4 backdrop-blur-md">
-                <i class="fa-solid fa-feather-pointed"></i> 雲端同步 · 幸福感恩企劃
+                <i class="fa-solid fa-feather-pointed"></i> 幸福+感恩分享
             </div>
             <h1 class="text-4xl md:text-6xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-warmgold via-lightamber to-maplered tracking-wide mb-3 drop-shadow-md">
                 幸福+感謝故事館
             </h1>
             <p class="text-base md:text-lg text-warmcream/80 max-w-2xl mx-auto font-serif leading-relaxed italic">
-                「在每片落下的楓葉裡，珍藏來自雲端試算表的真摯感謝。」
+                「每片落下的楓葉裡，都是真摯感謝!」
             </p>
         </div>
 
@@ -125,7 +125,7 @@
 
             <!-- 連結到 Google 問卷表單 -->
             <a href="https://forms.gle/UvwDEsgHPk1TAPCo9" target="_blank" rel="noopener noreferrer" class="px-6 py-2.5 rounded-2xl text-xs md:text-sm font-bold bg-gradient-to-r from-warmgold to-lightamber text-amberwood hover:brightness-110 transition-all shadow-lg shadow-warmgold/20 flex items-center gap-2 transform hover:-translate-y-0.5">
-                <i class="fa-solid fa-leaf"></i> 寫下你的感謝楓葉
+                <i class="fa-solid fa-leaf"></i> 歡迎分享感謝小故事
             </a>
         </div>
     </header>
@@ -135,7 +135,7 @@
         <div id="leavesSection" class="transition-all duration-500 py-4">
             <div class="text-center mb-8">
                 <p id="statusMsg" class="text-warmgold/90 text-sm font-serif">
-                    <i class="fa-solid fa-spinner fa-spin mr-1"></i> 正在連線至雲端試算表「感恩分享」...
+                    <i class="fa-solid fa-spinner fa-spin mr-1"></i> 正在連線...
                 </p>
             </div>
             
@@ -148,10 +148,10 @@
     <!-- FOOTER -->
     <footer class="relative z-20 text-center py-6 px-4 border-t border-warmgold/10 text-warmcream/50 text-xs">
         <p>感謝每一位在生命中帶來溫暖的人 🍁 幸福+感謝故事館</p>
-        <p class="mt-1">資料來源：Google 雲端試算表「感恩分享」工作表</p>
+        <p class="mt-1">資料來源</p>
     </footer>
 
-    <!-- MODAL: 故事詳細視窗 -->
+    <!-- MODAL: 故事詳細內容 -->
     <div id="storyModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-inactive bg-black/70 backdrop-blur-sm">
         <div class="relative w-full max-w-xl bg-gradient-to-b from-amberwood via-cozybrown to-darkwood border border-warmgold/40 rounded-3xl p-6 md:p-8 shadow-2xl text-warmcream transform transition-transform duration-300 scale-95" id="storyModalContent">
             
@@ -210,7 +210,7 @@
             const refreshIcon = document.getElementById('refreshIcon');
             
             if (refreshIcon) refreshIcon.classList.add('fa-spin');
-            statusMsg.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> 連線 Google 試算表【感恩分享】讀取中...';
+            statusMsg.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> 連線中...';
 
             const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
 
