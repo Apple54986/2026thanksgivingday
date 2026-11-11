@@ -1,460 +1,454 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>幸福+感謝故事館 - Thanksgiving</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: 圓體/手寫可愛風格 -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --bg-cream: #FDF4DE;
-    }
-    body {
-      font-family: 'M PLUS Rounded 1c', 'Noto Sans TC', sans-serif;
-      background-color: var(--bg-cream);
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(255, 178, 102, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 90% 10%, rgba(255, 153, 51, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 50% 90%, rgba(255, 204, 153, 0.25) 0%, transparent 50%);
-    }
-
-    /* 便利貼動態微幅擺動動畫 (Gentle floating / Swaying) */
-    @keyframes gentleSway1 {
-      0%, 100% { transform: rotate(-1.5deg) translateY(0px); }
-      50% { transform: rotate(-0.2deg) translateY(-6px); }
-    }
-    @keyframes gentleSway2 {
-      0%, 100% { transform: rotate(1.8deg) translateY(0px); }
-      50% { transform: rotate(0.4deg) translateY(-5px); }
-    }
-    @keyframes gentleSway3 {
-      0%, 100% { transform: rotate(-0.8deg) translateY(-2px); }
-      50% { transform: rotate(-2deg) translateY(3px); }
-    }
-
-    .sway-1 { animation: gentleSway1 4.2s ease-in-out infinite; }
-    .sway-2 { animation: gentleSway2 4.8s ease-in-out infinite; }
-    .sway-3 { animation: gentleSway3 5.3s ease-in-out infinite; }
-
-    /* 滑鼠懸停時放大並稍稍加強陰影 */
-    .sticky-card:hover {
-      animation-play-state: paused;
-      transform: scale(1.03) rotate(0deg) !important;
-      z-index: 20;
-    }
-
-    /* 木紋標題板質感 */
-    .wood-board {
-      background: linear-gradient(180deg, #A76527 0%, #7E4314 100%);
-      box-shadow: 0 8px 18px rgba(94, 49, 13, 0.25), inset 0 2px 3px rgba(255, 255, 255, 0.3);
-      border: 4px solid #5C2D0C;
-    }
-
-    /* 雲朵/旗幟標籤 */
-    .wood-ribbon {
-      background: linear-gradient(180deg, #FFF6E5 0%, #F5DFC2 100%);
-      box-shadow: 0 4px 10px rgba(138, 77, 23, 0.15);
-    }
-
-    /* 虛線內框 */
-    .dashed-border {
-      border: 2px dashed rgba(0, 0, 0, 0.12);
-    }
-
-    /* 文字截斷 */
-    .line-clamp-4 {
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-  </style>
-</head>
-
-<body class="min-h-screen flex flex-col justify-between overflow-x-hidden relative selection:bg-orange-200">
-
-  <!-- ================= 頂部裝飾與標題看板 ================= -->
-  <header class="pt-6 pb-2 px-4 relative z-10 text-center max-w-6xl mx-auto w-full">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>感恩故事館 | 拾起一片楓葉，閱讀一段感謝</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
     
-    <!-- 左上角活動標記 -->
-    <div class="absolute left-4 top-4 hidden md:flex items-center gap-1.5 text-orange-600 font-extrabold text-2xl tracking-wider">
-      <span class="text-3xl">🌸</span> 幸福+
-    </div>
-
-    <!-- 右上角 Thanksgiving 雲朵看板 -->
-    <div class="absolute right-4 top-2 hidden md:block text-right">
-      <div class="bg-white/85 backdrop-blur-sm border-2 border-orange-200 rounded-3xl px-5 py-2 shadow-sm inline-block">
-        <div class="text-amber-800 font-black text-lg tracking-wide flex items-center justify-end gap-1">
-          Thanksgiving <span class="text-orange-500">🧡</span>
-        </div>
-        <div class="text-xs text-amber-700/80 font-bold">感恩節 · 分享感謝 · 傳遞幸福</div>
-      </div>
-    </div>
-
-    <!-- 主木板看板標題 -->
-    <div class="inline-block relative my-3">
-      <!-- 楓葉飄落微裝飾 -->
-      <span class="absolute -top-4 -left-6 text-2xl -rotate-12 select-none">🍁</span>
-      <span class="absolute -bottom-2 -right-6 text-2xl rotate-45 select-none">🍂</span>
-
-      <!-- 復古木牌 -->
-      <div class="wood-board rounded-[38px] px-8 sm:px-14 py-3 sm:py-4 text-white relative shadow-xl">
-        <h1 class="text-2xl sm:text-4xl md:text-5xl font-black tracking-wider text-amber-50 drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] flex items-center justify-center gap-2">
-          幸福<span class="text-amber-300">+</span> 感謝故事館 <span class="text-red-300 text-3xl sm:text-4xl">♡</span>
-        </h1>
-      </div>
-
-      <!-- 下方掛旗/米白絲帶 -->
-      <div class="wood-ribbon -mt-3.5 sm:-mt-4 mx-auto w-[90%] sm:w-[85%] py-1.5 sm:py-2 px-4 rounded-full border border-amber-300 text-amber-900 font-black text-xs sm:text-sm tracking-widest shadow-md">
-        感謝有你，讓幸福更完整！♡
-      </div>
-    </div>
-
-    <!-- 手機版副標題提示 -->
-    <div class="md:hidden mt-2 text-xs font-bold text-amber-800/80">
-      🍂 感恩節 · 分享感謝 · 傳遞幸福 🍁
-    </div>
-  </header>
-
-  <!-- ================= 主內容：便利貼故事牆 ================= -->
-  <main class="max-w-6xl mx-auto px-4 sm:px-8 py-4 flex-grow w-full relative z-10">
-
-    <!-- 載入中骨架 -->
-    <div id="loadingBox" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-6">
-      <div class="h-56 bg-orange-100/60 rounded-3xl animate-pulse"></div>
-      <div class="h-56 bg-pink-100/60 rounded-3xl animate-pulse"></div>
-      <div class="h-56 bg-blue-100/60 rounded-3xl animate-pulse"></div>
-      <div class="h-56 bg-amber-100/60 rounded-3xl animate-pulse"></div>
-    </div>
-
-    <!-- 便利貼清單 (預設隱藏，由 JS 動態生成) -->
-    <div id="storiesWall" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-4 hidden"></div>
-
-    <!-- 尚無故事提示 -->
-    <div id="emptyBox" class="hidden text-center py-16">
-      <div class="text-5xl mb-3">💌</div>
-      <p class="text-amber-900 font-bold text-lg">目前還沒有公開的感謝留言</p>
-      <p class="text-amber-700/70 text-sm mt-1">點擊下方按鈕，成為第一個傳遞心意的人吧！</p>
-    </div>
-  </main>
-
-  <!-- ================= 底部操作列與南瓜裝飾 ================= -->
-  <footer class="relative z-20 pb-8 pt-4 px-4 max-w-6xl mx-auto w-full">
-    <div class="flex flex-col md:flex-row items-center justify-between gap-5 bg-white/60 backdrop-blur-md rounded-3xl p-4 sm:p-6 border border-amber-200/60 shadow-lg">
-      
-      <!-- 左側溫馨標語 -->
-      <div class="flex items-center gap-3 text-center md:text-left">
-        <span class="text-3xl select-none hidden sm:inline">🎃</span>
-        <div>
-          <div class="text-amber-900 font-black text-base sm:text-lg flex items-center justify-center md:justify-start gap-1">
-            讓感謝被看見，讓幸福加滿分 <span class="text-red-500 font-bold">♡</span>
-          </div>
-          <div class="text-xs text-amber-700 font-bold mt-0.5">
-            目前已累積 <span id="storyCount" class="text-orange-600 font-extrabold text-sm">--</span> 份溫暖心意
-          </div>
-        </div>
-      </div>
-
-      <!-- 右側按鈕群組 (抽一份幸福 / 我要分享感謝) -->
-      <div class="flex items-center gap-3 sm:gap-4 flex-wrap justify-center">
-        <!-- 抽一份幸福按鈕 (高亮立體橘色) -->
-        <button id="drawBtn" class="flex items-center gap-2 px-6 py-3 rounded-full text-white font-extrabold text-sm sm:text-base tracking-wide bg-gradient-to-b from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-[0_5px_15px_rgba(249,115,22,0.4)] hover:shadow-orange-400/50 active:scale-95 transition-all">
-          <span>🎁</span>
-          <span>抽一份幸福</span>
-          <span class="text-xs opacity-90">›</span>
-        </button>
-
-        <span class="text-amber-300 font-light hidden sm:inline">|</span>
-
-        <!-- 我要分享感謝 (白底輕巧木質感) -->
-        <a id="shareBtn" href="#" target="_blank" rel="noopener noreferrer" 
-           class="flex items-center gap-2 px-6 py-3 rounded-full bg-white hover:bg-orange-50 text-amber-900 font-extrabold text-sm sm:text-base tracking-wide border-2 border-amber-200 shadow-md active:scale-95 transition-all">
-          <span>🚀</span>
-          <span>我要分享感謝</span>
-          <span class="text-xs text-amber-500 font-bold">›</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- 底部暖心告示 -->
-    <div class="text-center text-xs text-amber-800/60 font-bold mt-3">
-      感謝，讓幸福更有溫度 ♡ 
-    </div>
-  </footer>
-
-  <!-- ================= 閱讀完整故事彈出視窗 (Modal) ================= -->
-  <div id="storyModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-amber-950/40 backdrop-blur-sm hidden opacity-0 transition-opacity duration-200">
-    <div id="modalBox" class="bg-[#FFFDF7] border-4 border-amber-200 rounded-[32px] max-w-md w-full p-6 sm:p-8 shadow-2xl transform scale-90 transition-transform duration-200 relative">
-      <!-- 頂部裝飾圖釘 -->
-      <div class="absolute -top-4 left-1/2 -translate-x-1/2 text-2xl select-none">
-        📌
-      </div>
-
-      <div class="text-center border-b border-amber-100 pb-3 mb-4">
-        <h3 class="text-lg font-black text-amber-900 flex items-center justify-center gap-1.5">
-          <span>💌</span> 一份溫馨的感謝
-        </h3>
-      </div>
-
-      <!-- 故事本文 -->
-      <div class="max-h-[60vh] overflow-y-auto pr-2">
-        <p id="modalContent" class="text-amber-950/85 text-base sm:text-lg leading-relaxed whitespace-pre-line font-medium"></p>
-      </div>
-
-      <!-- 關閉按鈕（修復：補回被遺漏的按鈕與閉合標籤） -->
-      <div class="mt-6 text-center">
-        <button id="closeModalBtn" class="px-6 py-2 rounded-full bg-amber-200 hover:bg-amber-300 text-amber-900 font-black text-sm tracking-wide transition shadow-sm">
-          收下這份溫暖 ♡
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= 腳本區 ================= -->
-  <script>
-    const CONFIG = {
-      GAS_API_URL: "https://script.google.com/macros/s/AKfycbylWT-CO1tl-6-bRKjHQFyPlkK2UwOZtsCgv52DFUqqyQx6nxWN-fwNqZ1MfOH1hCsG5g/exec",
-      GOOGLE_FORM_URL: "https://forms.gle/k6VeMofADWkixGyb8"
-    };
-
-    // 8 種符合插畫的便利貼配色主題
-    const NOTE_THEMES = [
-      {
-        bg: 'bg-[#FFE8EC]',
-        border: 'border-[#FFCCD5]',
-        accent: 'text-[#E06D82]',
-        pin: '❤️',
-        pinClass: '-top-3 left-6',
-        sway: 'sway-1',
-        rotate: '-rotate-2'
-      },
-      {
-        bg: 'bg-[#FFF9DB]',
-        border: 'border-[#FEEAA1]',
-        accent: 'text-[#DDA22A]',
-        pin: '🟡',
-        isTape: true,
-        tapeBg: 'bg-amber-300/80',
-        pinClass: '-top-2.5 left-1/2 -translate-x-1/2',
-        sway: 'sway-2',
-        rotate: 'rotate-1'
-      },
-      {
-        bg: 'bg-[#EBF4FF]',
-        border: 'border-[#C8E0FF]',
-        accent: 'text-[#5C94DB]',
-        pin: '📍',
-        pinClass: '-top-3.5 right-8',
-        sway: 'sway-3',
-        rotate: '-rotate-1'
-      },
-      {
-        bg: 'bg-[#FEF7D9]',
-        border: 'border-[#F8E9B6]',
-        accent: 'text-[#DA9D29]',
-        pin: '🟢',
-        isTape: true,
-        tapeBg: 'bg-emerald-300/80',
-        pinClass: '-top-2.5 right-6',
-        sway: 'sway-1',
-        rotate: 'rotate-2'
-      },
-      {
-        bg: 'bg-[#EDF9E7]',
-        border: 'border-[#CEEBC1]',
-        accent: 'text-[#6EA859]',
-        pin: '📎',
-        pinClass: '-top-3.5 left-8',
-        sway: 'sway-2',
-        rotate: '-rotate-2'
-      },
-      {
-        bg: 'bg-[#F4EBFF]',
-        border: 'border-[#E2CEFF]',
-        accent: 'text-[#9A6CD6]',
-        pin: '💖',
-        pinClass: '-top-3 left-1/2 -translate-x-1/2',
-        sway: 'sway-3',
-        rotate: 'rotate-1'
-      },
-      {
-        bg: 'bg-[#FFF8F0]',
-        border: 'border-[#FEE5CD]',
-        accent: 'text-[#D87D38]',
-        pin: '🎀',
-        isTape: true,
-        tapeBg: 'bg-rose-300/80',
-        pinClass: '-top-2.5 left-1/2 -translate-x-1/2',
-        sway: 'sway-1',
-        rotate: '-rotate-1'
-      },
-      {
-        bg: 'bg-[#FFF2E0]',
-        border: 'border-[#FDD8AE]',
-        accent: 'text-[#D47E24]',
-        pin: '📌',
-        pinClass: '-top-3.5 right-6',
-        sway: 'sway-2',
-        rotate: 'rotate-2'
-      }
-    ];
-
-    let storyList = [];
-
-    // DOM 元素快取
-    const storiesWall = document.getElementById('storiesWall');
-    const loadingBox = document.getElementById('loadingBox');
-    const emptyBox = document.getElementById('emptyBox');
-    const storyCount = document.getElementById('storyCount');
-    const drawBtn = document.getElementById('drawBtn');
-    const shareBtn = document.getElementById('shareBtn');
-    const storyModal = document.getElementById('storyModal');
-    const modalBox = document.getElementById('modalBox');
-    const modalContent = document.getElementById('modalContent');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-
-    // 初始化載入
-    document.addEventListener("DOMContentLoaded", () => {
-      if (shareBtn) shareBtn.href = CONFIG.GOOGLE_FORM_URL;
-      bindEvents();
-      fetchStories();
-    });
-
-    function bindEvents() {
-      // 點擊關閉按鈕或彈窗背景
-      if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', closeModal);
-      }
-      if (storyModal) {
-        storyModal.addEventListener('click', (e) => {
-          if (e.target === storyModal) closeModal();
-        });
-      }
-
-      // 抽一份幸福按鈕
-      if (drawBtn) {
-        drawBtn.addEventListener('click', () => {
-          if (!storyList || storyList.length === 0) {
-            alert("目前還沒有故事可以抽取喔，歡迎先分享！");
-            return;
-          }
-          const randomIndex = Math.floor(Math.random() * storyList.length);
-          openModal(storyList[randomIndex].content);
-        });
-      }
-    }
-
-    // 取得 Google Apps Script B 欄故事資料
-    async function fetchStories() {
-      if (loadingBox) loadingBox.classList.remove('hidden');
-      if (storiesWall) storiesWall.classList.add('hidden');
-      if (emptyBox) emptyBox.classList.add('hidden');
-
-      try {
-        const res = await fetch(CONFIG.GAS_API_URL);
-        const data = await res.json();
-
-        if (data.status === "success" && Array.isArray(data.stories)) {
-          storyList = data.stories;
-          if (storyCount) storyCount.textContent = storyList.length;
-          renderStories(storyList);
-        } else {
-          storyList = [];
-          renderStories([]);
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        amberwood: '#2C1A11',
+                        cozybrown: '#4A2E1B',
+                        warmgold: '#F4B251',
+                        maplered: '#B83B26',
+                        warmcream: '#FAF3E0',
+                        lightamber: '#E8A352',
+                        darkwood: '#1D120B'
+                    },
+                    fontFamily: {
+                        serif: ['Noto Serif TC', 'serif'],
+                        rounded: ['Zen Maru Gothic', 'sans-serif']
+                    }
+                }
+            }
         }
-      } catch (err) {
-        console.error("載入失敗:", err);
-        storyList = [];
-        renderStories([]);
-      } finally {
-        if (loadingBox) loadingBox.classList.add('hidden');
-      }
-    }
+    </script>
 
-    // 渲染可愛便利貼
-    function renderStories(stories) {
-      if (!storiesWall) return;
-      storiesWall.innerHTML = '';
-
-      if (stories.length === 0) {
-        if (emptyBox) emptyBox.classList.remove('hidden');
-        if (storyCount) storyCount.textContent = '0';
-        return;
-      }
-
-      storiesWall.classList.remove('hidden');
-
-      stories.forEach((story, idx) => {
-        const theme = NOTE_THEMES[idx % NOTE_THEMES.length];
-        const cardWrapper = document.createElement('div');
-        cardWrapper.className = `cursor-pointer transition-transform duration-300 sticky-card ${theme.sway}`;
-
-        let pinElement = '';
-        if (theme.isTape) {
-          pinElement = `
-            <div class="absolute ${theme.pinClass} w-14 h-4 ${theme.tapeBg} rounded-sm shadow-xs border border-white/40 -rotate-1 z-10 opacity-90"></div>
-          `;
-        } else {
-          pinElement = `
-            <div class="absolute ${theme.pinClass} text-xl drop-shadow-sm z-10 select-none">${theme.pin}</div>
-          `;
+    <style>
+        body {
+            font-family: 'Zen Maru Gothic', 'Noto Serif TC', serif;
+            background-color: #1a0f0a;
+            color: #FAF3E0;
+            overflow-x: hidden;
         }
 
-        cardWrapper.innerHTML = `
-          <div class="relative ${theme.bg} border-2 ${theme.border} rounded-[28px] p-5 shadow-[0_6px_16px_rgba(138,77,23,0.08)] h-56 flex flex-col justify-between group">
-            ${pinElement}
-            <div class="dashed-border rounded-[20px] p-4 h-full flex flex-col justify-between overflow-hidden">
-              <p class="text-amber-950 font-bold text-sm sm:text-base leading-relaxed line-clamp-4">
-                ${escapeHtml(story.content)}
-              </p>
-              <div class="flex items-center justify-between text-xs font-black ${theme.accent} pt-2 mt-auto">
-                <span class="tracking-widest">˗ˏˋ ☀︎ ˎˊ˗</span>
-                <span class="text-sm">♡ ♡</span>
-              </div>
+        #leafCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .ambient-glow {
+            background: radial-gradient(circle at 50% 20%, rgba(244, 178, 81, 0.18) 0%, rgba(184, 59, 38, 0.08) 50%, rgba(29, 18, 11, 0) 80%);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2C1A11;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #B83B26;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #F4B251;
+        }
+
+        .floating-leaf {
+            animation: float 4s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+        .floating-leaf:hover {
+            transform: scale(1.05) rotate(2deg);
+            filter: drop-shadow(0 0 12px rgba(244, 178, 81, 0.8));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+
+        .modal-active {
+            opacity: 1;
+            pointer-events: auto;
+            transition: opacity 0.4s ease;
+        }
+        .modal-inactive {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen bg-darkwood text-warmcream flex flex-col justify-between">
+
+    <!-- 落葉動畫背景 -->
+    <canvas id="leafCanvas"></canvas>
+    <div class="fixed inset-0 ambient-glow pointer-events-none"></div>
+
+    <!-- MAIN HEADER -->
+    <header class="relative z-20 pt-8 pb-4 px-4 text-center">
+        <div class="max-w-4xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-warmgold/10 border border-warmgold/30 text-warmgold text-sm mb-4 backdrop-blur-md">
+                <i class="fa-solid fa-feather-pointed"></i> 雲端同步 · 幸福感恩企劃
             </div>
-          </div>
-        `;
+            <h1 class="text-4xl md:text-6xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-warmgold via-lightamber to-maplered tracking-wide mb-3 drop-shadow-md">
+                幸福+感謝故事館
+            </h1>
+            <p class="text-base md:text-lg text-warmcream/80 max-w-2xl mx-auto font-serif leading-relaxed italic">
+                「在每片落下的楓葉裡，珍藏來自雲端試算表的真摯感謝。」
+            </p>
+        </div>
 
-        cardWrapper.addEventListener('click', () => {
-          openModal(story.content);
-        });
+        <div class="flex flex-wrap items-center justify-center gap-4 mt-8">
+            <!-- 重新整理雲端資料按鈕 -->
+            <button onclick="fetchGoogleSheetData(true)" class="px-5 py-2.5 rounded-2xl text-xs md:text-sm font-bold bg-amberwood/80 border border-warmgold/40 text-warmgold hover:bg-warmgold hover:text-amberwood transition-all shadow-lg flex items-center gap-2">
+                <i class="fa-solid fa-arrows-rotate" id="refreshIcon"></i> 重新載入最新故事
+            </button>
 
-        storiesWall.appendChild(cardWrapper);
-      });
-    }
+            <!-- 連結到 Google 問卷表單 -->
+            <a href="https://forms.gle/UvwDEsgHPk1TAPCo9" target="_blank" rel="noopener noreferrer" class="px-6 py-2.5 rounded-2xl text-xs md:text-sm font-bold bg-gradient-to-r from-warmgold to-lightamber text-amberwood hover:brightness-110 transition-all shadow-lg shadow-warmgold/20 flex items-center gap-2 transform hover:-translate-y-0.5">
+                <i class="fa-solid fa-leaf"></i> 寫下你的感謝楓葉
+            </a>
+        </div>
+    </header>
 
-    // Modal 控制
-    function openModal(content) {
-      if (!storyModal || !modalContent || !modalBox) return;
-      modalContent.textContent = content;
-      storyModal.classList.remove('hidden');
-      setTimeout(() => {
-        storyModal.classList.remove('opacity-0');
-        modalBox.classList.remove('scale-90');
-      }, 10);
-    }
+    <!-- CONTENT AREA -->
+    <main class="relative z-20 max-w-6xl mx-auto px-4 py-6 w-full flex-grow">
+        <div id="leavesSection" class="transition-all duration-500 py-4">
+            <div class="text-center mb-8">
+                <p id="statusMsg" class="text-warmgold/90 text-sm font-serif">
+                    <i class="fa-solid fa-spinner fa-spin mr-1"></i> 正在連線至雲端試算表「感恩分享」...
+                </p>
+            </div>
+            
+            <div id="leavesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-2 md:p-6 min-h-[300px]">
+                <!-- 故事卡片將由 JS 動態產生 -->
+            </div>
+        </div>
+    </main>
 
-    function closeModal() {
-      if (!storyModal || !modalBox) return;
-      storyModal.classList.add('opacity-0');
-      modalBox.classList.add('scale-90');
-      setTimeout(() => {
-        storyModal.classList.add('hidden');
-      }, 200);
-    }
+    <!-- FOOTER -->
+    <footer class="relative z-20 text-center py-6 px-4 border-t border-warmgold/10 text-warmcream/50 text-xs">
+        <p>感謝每一位在生命中帶來溫暖的人 🍁 幸福+感謝故事館</p>
+        <p class="mt-1">資料來源：Google 雲端試算表「感恩分享」工作表</p>
+    </footer>
 
-    // XSS 防護
-    function escapeHtml(str) {
-      const div = document.createElement('div');
-      div.innerText = str;
-      return div.innerHTML;
-    }
-  </script>
+    <!-- MODAL: 故事詳細視窗 -->
+    <div id="storyModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-inactive bg-black/70 backdrop-blur-sm">
+        <div class="relative w-full max-w-xl bg-gradient-to-b from-amberwood via-cozybrown to-darkwood border border-warmgold/40 rounded-3xl p-6 md:p-8 shadow-2xl text-warmcream transform transition-transform duration-300 scale-95" id="storyModalContent">
+            
+            <button onclick="closeStoryModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/30 border border-warmgold/30 flex items-center justify-center text-warmgold hover:bg-maplered hover:text-white transition-all">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="flex items-center gap-2 mb-4">
+                <span id="modalCategory" class="px-3 py-1 rounded-full text-xs font-bold bg-maplered/30 border border-maplered/50 text-warmgold">
+                    感恩分享 (B欄)
+                </span>
+                <span id="modalDate" class="text-xs text-warmcream/50"></span>
+            </div>
+
+            <h3 id="modalTitle" class="text-2xl md:text-3xl font-serif font-bold text-warmgold mb-2"></h3>
+            <div class="flex items-center gap-2 text-sm text-lightamber mb-6 italic">
+                <span>致：</span><span id="modalRecipient" class="font-bold"></span>
+            </div>
+
+            <div class="bg-black/20 rounded-2xl p-5 border border-warmgold/10 mb-6 max-h-60 overflow-y-auto leading-relaxed text-warmcream/90 text-sm md:text-base font-serif space-y-3 whitespace-pre-wrap" id="modalStoryBody">
+            </div>
+
+            <div class="bg-gradient-to-r from-warmgold/10 to-maplered/10 border-l-4 border-warmgold p-4 rounded-r-2xl text-warmgold italic text-sm">
+                <i class="fa-solid fa-quote-left mr-2 opacity-50"></i>
+                <span id="modalQuote">「世上所有的偶然遇見，都是溫暖的重逢。」</span>
+            </div>
+
+            <div class="mt-6 flex justify-end items-center text-xs text-warmcream/60">
+                <button onclick="closeStoryModal()" class="px-6 py-2.5 rounded-xl bg-warmgold text-amberwood font-bold hover:bg-lightamber transition-all shadow-md">
+                    關閉故事
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示 TOAST -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-gradient-to-r from-maplered to-cozybrown border border-warmgold/50 text-warmcream px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+        <i class="fa-solid fa-circle-check text-warmgold text-xl"></i>
+        <span id="toastMsg" class="text-sm font-semibold"></span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // ==========================================
+        // ⚙️ Google 雲端試算表設定區
+        // ==========================================
+        // 請將此處字串替換為您 Google 試算表（幸福+感謝故事館）網址中的試算表 ID：
+        const SPREADSHEET_ID = 'YOUR_GOOGLE_SHEET_ID_HERE'; 
+        const SHEET_NAME = '感恩分享';
+
+        let storyData = [];
+
+        // --- 1. 從 GOOGLE 試算表擷取資料 ---
+        async function fetchGoogleSheetData(isManualRefresh = false) {
+            const statusMsg = document.getElementById('statusMsg');
+            const refreshIcon = document.getElementById('refreshIcon');
+            
+            if (refreshIcon) refreshIcon.classList.add('fa-spin');
+            statusMsg.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> 連線 Google 試算表【感恩分享】讀取中...';
+
+            const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('連線試算表失敗，請確認試算表 ID 是否正確且已開放共用。');
+                
+                const text = await response.text();
+                const jsonStr = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+                const data = JSON.parse(jsonStr);
+
+                const rows = data.table.rows || [];
+                const parsedStories = [];
+
+                rows.forEach((row, index) => {
+                    if (!row.c) return;
+
+                    // 欄位對應（c[0]=A欄, c[1]=B欄, c[2]=C欄, c[3]=D欄...）
+                    const colA = row.c[0] ? (row.c[0].f || row.c[0].v || '') : '';
+                    const colB = row.c[1] ? (row.c[1].f || row.c[1].v || '') : ''; // 讀取 B 欄：感恩故事內容
+                    const colC = row.c[2] ? (row.c[2].f || row.c[2].v || '') : '';
+                    const colD = row.c[3] ? (row.c[3].f || row.c[3].v || '') : '';
+
+                    const storyText = String(colB).trim();
+
+                    // 若 B 欄為空或是表頭標題列則跳過
+                    if (!storyText || storyText === '故事' || storyText === '感謝故事' || storyText === '故事內容') {
+                        return;
+                    }
+
+                    // 標題預設抓 A 欄，若 A 欄為空則取 B 欄前 14 個字
+                    const titleText = colA ? String(colA).trim() : (storyText.slice(0, 14) + (storyText.length > 14 ? '...' : ''));
+                    const recipientText = colC ? String(colC).trim() : '身邊溫暖的人';
+                    const quoteText = colD ? String(colD).trim() : '感謝有你，溫暖常在。';
+
+                    parsedStories.push({
+                        id: index + 1,
+                        title: titleText,
+                        recipient: recipientText,
+                        date: new Date().toISOString().split('T')[0],
+                        story: storyText, // B 欄位內容
+                        quote: quoteText
+                    });
+                });
+
+                if (parsedStories.length === 0) {
+                    statusMsg.innerHTML = '⚠️ 試算表「感恩分享」工作表目前 B 欄尚無故事資料。';
+                } else {
+                    storyData = parsedStories;
+                    statusMsg.innerHTML = `🍁 已成功自 Google 試算表載入 <strong>${storyData.length}</strong> 則感謝故事`;
+                }
+
+                renderLeaves();
+                if (isManualRefresh) showToast("已重新載入最新雲端故事！");
+
+            } catch (err) {
+                console.warn('載入 Google 試算表失敗，啟動備份演示資料：', err);
+                statusMsg.innerHTML = `<span class="text-maplered">⚠️ 雲端試算表未連線（請記得替換程式碼中的 SPREADSHEET_ID 並開啟共用檢視權限）</span>`;
+                loadFallbackStories();
+            } finally {
+                if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+            }
+        }
+
+        // 備用演示資料（避免剛開啟尚未設定 ID 時完全無內容）
+        function loadFallbackStories() {
+            storyData = [
+                {
+                    id: 1,
+                    title: '那碗暖心熱湯',
+                    recipient: '夜市老火車站麵攤老闆娘',
+                    date: '2026-11-15',
+                    story: '（範例資料）記得那是幾年前一個寒冷的冬夜，加完班錯過了末班車。走到巷口的麵攤，老闆娘端了一碗熱騰騰的湯給我：「孩子辛苦了，這碗阿姨請你。」那天的湯特別甜，溫暖了我整個低潮的季節。',
+                    quote: '有時候，一碗熱湯就能為孤單的夜點亮整座城市。'
+                },
+                {
+                    id: 2,
+                    title: '雨天裡的雨傘',
+                    recipient: '捷運站陌生乘客',
+                    date: '2026-10-20',
+                    story: '（範例資料）下暴雨的午後，一位準備搭車的小姐把手上的折疊傘遞給了我：「這把傘送你吧！別淋濕感冒了。」那把紅傘，我至今依然珍藏著。',
+                    quote: '陌生人的善意，是漫長雨季裡最燦爛的陽光。'
+                }
+            ];
+            renderLeaves();
+        }
+
+        // --- 2. 渲染葉片卡片 ---
+        function renderLeaves() {
+            const grid = document.getElementById('leavesGrid');
+            grid.innerHTML = '';
+
+            storyData.forEach((item, index) => {
+                const leafElem = document.createElement('div');
+                leafElem.className = 'floating-leaf cursor-pointer bg-amberwood/60 border border-warmgold/20 rounded-2xl p-5 flex flex-col justify-between shadow-xl backdrop-blur-sm relative group hover:border-warmgold/60';
+                leafElem.style.animationDelay = `${(index % 5) * 0.5}s`;
+                leafElem.onclick = () => openStoryModal(item.id);
+
+                const iconColor = index % 2 === 0 ? 'text-maplered' : 'text-warmgold';
+
+                leafElem.innerHTML = `
+                    <div class="flex items-center justify-between mb-3">
+                        <i class="fa-solid fa-leaf ${iconColor} text-2xl group-hover:rotate-45 transition-transform duration-300"></i>
+                        <span class="text-[10px] text-warmgold/60 bg-warmgold/10 px-2 py-0.5 rounded-full border border-warmgold/20">楓葉 #${index + 1}</span>
+                    </div>
+                    <div>
+                        <h4 class="font-serif font-bold text-base text-warmcream group-hover:text-warmgold transition-colors mb-1 truncate">
+                            ${item.title}
+                        </h4>
+                        <p class="text-xs text-warmcream/60 line-clamp-3 leading-relaxed">
+                            ${item.story}
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-warmgold/10 flex justify-between items-center text-[10px] text-warmcream/50">
+                        <span class="truncate max-w-[130px]">致: ${item.recipient}</span>
+                        <span class="text-warmgold">閱讀 ></span>
+                    </div>
+                `;
+                grid.appendChild(leafElem);
+            });
+        }
+
+        // --- 3. 視窗互動 ---
+        function openStoryModal(id) {
+            const story = storyData.find(item => item.id === id);
+            if (!story) return;
+
+            document.getElementById('modalTitle').innerText = story.title;
+            document.getElementById('modalRecipient').innerText = story.recipient;
+            document.getElementById('modalDate').innerText = story.date || '';
+            document.getElementById('modalStoryBody').innerText = story.story;
+            document.getElementById('modalQuote').innerText = story.quote || '感謝有你，溫暖常在。';
+
+            const modal = document.getElementById('storyModal');
+            const content = document.getElementById('storyModalContent');
+            modal.classList.remove('modal-inactive');
+            modal.classList.add('modal-active');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }
+
+        function closeStoryModal() {
+            const modal = document.getElementById('storyModal');
+            const content = document.getElementById('storyModalContent');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            modal.classList.remove('modal-active');
+            modal.classList.add('modal-inactive');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // --- 4. 背景飄落楓葉粒子動畫 ---
+        const canvas = document.getElementById('leafCanvas');
+        const ctx = canvas.getContext('2d');
+        let leavesArray = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class MapleLeaf {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = -20;
+                this.size = Math.random() * 12 + 8;
+                this.speedY = Math.random() * 1.2 + 0.6;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.rotation = Math.random() * 360;
+                this.rotSpeed = Math.random() * 1.5 - 0.75;
+                this.opacity = Math.random() * 0.6 + 0.3;
+                const colors = ['#B83B26', '#F4B251', '#E8A352', '#8C2B1B'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += Math.sin(this.y / 30) + this.speedX;
+                this.rotation += this.rotSpeed;
+                if (this.y > canvas.height + 20) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.moveTo(0, -this.size);
+                ctx.quadraticCurveTo(this.size * 0.3, -this.size * 0.4, this.size * 0.8, -this.size * 0.5);
+                ctx.quadraticCurveTo(this.size * 0.4, 0, this.size * 0.9, this.size * 0.4);
+                ctx.quadraticCurveTo(this.size * 0.2, this.size * 0.3, 0, this.size);
+                ctx.quadraticCurveTo(-this.size * 0.2, this.size * 0.3, -this.size * 0.9, this.size * 0.4);
+                ctx.quadraticCurveTo(-this.size * 0.4, 0, -this.size * 0.8, -this.size * 0.5);
+                ctx.quadraticCurveTo(-this.size * 0.3, -this.size * 0.4, 0, -this.size);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function initLeaves() {
+            leavesArray = [];
+            const numberOfLeaves = Math.min(Math.floor(window.innerWidth / 35), 35);
+            for (let i = 0; i < numberOfLeaves; i++) {
+                const leaf = new MapleLeaf();
+                leaf.y = Math.random() * canvas.height;
+                leavesArray.push(leaf);
+            }
+        }
+
+        function animateLeaves() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            leavesArray.forEach(leaf => {
+                leaf.update();
+                leaf.draw();
+            });
+            requestAnimationFrame(animateLeaves);
+        }
+
+        // 初始化
+        window.onload = function() {
+            initLeaves();
+            animateLeaves();
+            fetchGoogleSheetData();
+        };
+    </script>
 </body>
 </html>
