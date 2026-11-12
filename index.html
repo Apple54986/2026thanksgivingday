@@ -307,8 +307,8 @@
             const story = storyData.find(item => item.id === id);
             if (!story) return;
 
-            document.getElementById('modalIndex').innerText = `故事 #${story.id}`;
-            document.getElementById('modalTitle').innerText = `暖心感謝分享 #${story.id}`;
+            document.getElementById('modalIndex').innerText = ` `;
+            document.getElementById('modalTitle').innerText = `暖心感謝分享`;
             document.getElementById('modalStoryBody').innerText = story.story;
 
             const modal = document.getElementById('storyModal');
