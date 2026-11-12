@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>幸福+感恩故事館 | 讓感謝被看見，讓幸福加滿分</title>
- <!-- ======================================================== -->
+    <!-- ======================================================== -->
     <!-- 🌟 自訂社群分享與 LINE 預覽文字（在此處修改您的摘要描述） -->
     <!-- ======================================================== -->
-    <meta name="description" content="拾起一片楓葉，閱讀一段感謝。歡迎一起分享生活中的暖心故事與真摯心意！">
+    <meta name="description" content="拾起一片楓葉，閱讀一段感謝。歡迎分享生活中的暖心故事！">
     <meta property="og:type" content="website">
     <meta property="og:title" content="幸福+感謝故事館 | 讓感謝被看見，讓幸福加滿分">
-    <meta property="og:description" content="拾起一片楓葉，閱讀一段感謝。歡迎一起分享生活中的暖心故事與真摯心意！">
+    <meta property="og:description" content="拾起一片楓葉，閱讀一段感謝。歡迎分享生活中的暖心故事！">
     <meta property="og:url" content="https://apple54986.github.io/2026thanksgivingday/">
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -121,12 +122,12 @@
                 幸福+感謝故事館
             </h1>
             <p class="text-base md:text-lg text-warmcream/80 max-w-2xl mx-auto font-serif leading-relaxed italic">
-                「每片落下的楓葉裡，都是真摯的心意💖」
+                「每片落下的楓葉裡，都是真摯的心意❁´◡`❁」
             </p>
         </div>
 
         <div class="flex flex-wrap items-center justify-center gap-4 mt-8">
-            <!-- 重新整理雲端資料按鈕 -->
+            <!-- 重新整理雲端資料按鈕（點擊也會隨機換一次順序） -->
             <button onclick="fetchGoogleSheetData(true)" class="px-5 py-2.5 rounded-2xl text-xs md:text-sm font-bold bg-amberwood/80 border border-warmgold/40 text-warmgold hover:bg-warmgold hover:text-amberwood transition-all shadow-lg flex items-center gap-2">
                 <i class="fa-solid fa-arrows-rotate" id="refreshIcon"></i> 重新載入最新故事
             </button>
@@ -204,6 +205,16 @@
 
         let storyData = [];
 
+        // --- 隨機打亂陣列順序演算法 (Fisher-Yates Shuffle) ---
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
         // --- 1. 從 GOOGLE 試算表擷取資料（只讀取 B 欄） ---
         async function fetchGoogleSheetData(isManualRefresh = false) {
             const statusMsg = document.getElementById('statusMsg');
@@ -238,15 +249,17 @@
                     }
 
                     parsedStories.push({
-                        id: parsedStories.length + 1,
+                        id: 'story_' + index + '_' + Math.random().toString(36).substr(2, 5),
                         story: storyText
                     });
                 });
 
                 if (parsedStories.length === 0) {
-                    statusMsg.innerHTML = '目前尚無故事，等你來分享✨';
+                    statusMsg.innerHTML = '目前尚無故事，等你來分享';
+                    storyData = [];
                 } else {
-                    storyData = parsedStories;
+                    // 🌟 在這裡將抓取到的故事隨機打亂順序
+                    storyData = shuffleArray(parsedStories);
                     statusMsg.innerHTML = `🍁 已成功載入故事囉!`;
                 }
 
@@ -262,18 +275,19 @@
             }
         }
 
-        // 備用演示資料（僅保留故事內容）
+        // 備用演示資料（隨機打亂）
         function loadFallbackStories() {
-            storyData = [
+            const fallback = [
                 {
-                    id: 1,
+                    id: 'fb_1',
                     story: '（範例故事）記得那是幾年前一個寒冷的冬夜，加完班錯過了末班車。走到巷口的麵攤，老闆娘端了一碗熱騰騰的湯給我：「孩子辛苦了，這碗阿姨請你。」那天的湯特別甜，溫暖了我整個低潮的季節。'
                 },
                 {
-                    id: 2,
+                    id: 'fb_2',
                     story: '（範例故事）下暴雨的午後，一位準備搭車的小姐把手上的折疊傘遞給了我：「這把傘送你吧！別淋濕感冒了。」那把紅傘，我至今依然珍藏著。'
                 }
             ];
+            storyData = shuffleArray(fallback);
             renderLeaves();
         }
 
@@ -294,7 +308,7 @@
                     <div class="flex items-center justify-between mb-3">
                         <i class="fa-solid fa-leaf ${iconColor} text-2xl group-hover:rotate-45 transition-transform duration-300"></i>
                         <span class="text-[10px] text-warmgold/70 bg-warmgold/10 px-2.5 py-0.5 rounded-full border border-warmgold/20 font-bold">
-                            #${item.id}
+                            感謝分享
                         </span>
                     </div>
                     <div>
